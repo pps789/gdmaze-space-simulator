@@ -14,12 +14,11 @@ map<vector<int>, long long> L[21], R[21];
 vector<pair<vector<int>, long long>> Lv[21], Rv[21];
 
 const int SMAX = 700;
-unordered_map<int,unordered_map<int,int>> cache_up[SMAX], cache_down[SMAX];
+unordered_map<int,int> cache_up[SMAX][SMAX], cache_down[SMAX][SMAX];
 int N, M;
 
-bool cache_check(const unordered_map<int,unordered_map<int,int>>& cache, int x, int y) {
-    if (cache.count(x)) return cache.at(x).count(y);
-    return false;
+bool cache_check(const unordered_map<int,int>& cache, int x) {
+    return cache.count(x);
 }
 
 Airship ally_default, enemy_default;
@@ -118,8 +117,8 @@ void MITM() {
             int luk = lv.first[3]+rv.first[3];
             bool fast = ally_default.spd + spd >= enemy_default.spd;
 
-            if (fast && cache_check(cache_up[att], def, luk)) continue;
-            if (!fast && cache_check(cache_down[att], def, luk)) continue;
+            if (fast && cache_check(cache_up[att][def], luk)) continue;
+            if (!fast && cache_check(cache_down[att][def], luk)) continue;
 
             Airship ally = ally_default, enemy = enemy_default;
             ally.att += att;
