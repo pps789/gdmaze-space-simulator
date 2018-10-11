@@ -89,6 +89,7 @@ int best_hp = -0x3fFFffFF;
 void MITM() {
     for(int i=0;i<=M;i++) {
         printf("Processing... %d of %d\n", i, M);
+        printf("Investigating %lld pairs...\n", 1LL*L[i].size()*R[M-i].size());
 
         // pick i from L, M-i from R
         for(const auto& lv:L[i]) for(const auto& rv:R[M-i]) {

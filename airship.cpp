@@ -1,6 +1,7 @@
 #include "airship.h"
 #include <utility>
 #include <algorithm>
+#include <cstdio>
 
 std::pair<int,int> Airship::hit(const Airship& enemy) {
     int luck_factor = luk > enemy.luk ? (luk*1000/enemy.luk)/1000 : 1;
@@ -16,6 +17,6 @@ std::pair<int,int> Airship::hit(const Airship& enemy) {
 }
 
 void Airship::print() {
-    printf("%d/%d, %d %d %d %d\n", cur_hp, max_hp, att, def, spd, luk);
-    printf("Additional spec: %d %d %d %d\n", additional, reflect, critical, reductional);
+    std::printf("%d/%d, %d %d %d %d\n", cur_hp, max_hp, att, def, spd, luk);
+    std::printf("Additional spec: %d %d %d %d\n", additional, reflect, critical, reductional);
 }
