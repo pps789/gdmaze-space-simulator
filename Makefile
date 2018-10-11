@@ -17,3 +17,6 @@ battle.o: battle.cpp battle.h airship.h
 
 airship.o: airship.cpp airship.h
 	$(CXX) $(CPPFLAGS) -c airship.cpp
+
+clean:
+	rm -rf *.o
