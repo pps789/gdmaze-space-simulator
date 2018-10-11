@@ -14,3 +14,8 @@ std::pair<int,int> Airship::hit(const Airship& enemy) {
 
     return {std::min(damage, enemy.cur_hp), std::min(enemy.reflect, cur_hp)};
 }
+
+void Airship::print() {
+    printf("%d/%d, %d %d %d %d\n", cur_hp, max_hp, att, def, spd, luk);
+    printf("Additional spec: %d %d %d %d\n", additional, reflect, critical, reductional);
+}

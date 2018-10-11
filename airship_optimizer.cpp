@@ -14,7 +14,6 @@ map<vector<int>, string> L[21], R[21];
 int N, M;
 
 Airship ally_default, enemy_default;
-int additional, reflect, critical, reductional;
 
 void parse() {
     ifstream airship_ifs("airship.txt"), config_ifs("config.txt");
@@ -27,10 +26,10 @@ void parse() {
 
     // TODO: fix this!
     string trash;
-    config_ifs >> trash >> additional;
-    config_ifs >> trash >> reflect;
-    config_ifs >> trash >> critical;
-    config_ifs >> trash >> reductional;
+    config_ifs >> trash >> ally_default.additional;
+    config_ifs >> trash >> ally_default.reflect;
+    config_ifs >> trash >> ally_default.critical;
+    config_ifs >> trash >> ally_default.reductional;
     config_ifs >> trash >> M;
     
     config_ifs >> trash >> ally_default.max_hp;
@@ -42,7 +41,7 @@ void parse() {
         >> enemy_default.spd >> enemy_default.luk;
 
     ally_default.cur_hp = ally_default.max_hp;
-    enemy_default.cur_hp = enemy_default.cur_hp;
+    enemy_default.cur_hp = enemy_default.max_hp;
 }
 
 int Lsize, Rsize;
@@ -113,6 +112,8 @@ void MITM() {
 int main(){
     parse();
     printf("Parse done.\n");
+    printf("Ally\n"); ally_default.print();
+    printf("Enemy\n"); enemy_default.print();
 
     half_gen();
     printf("Data generated.\n");

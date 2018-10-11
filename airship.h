@@ -11,6 +11,8 @@ struct Airship {
 
     // returns (damage made by me, damage made by enemy)
     std::pair<int,int> hit(const Airship& enemy);
+
+    void print();
 };
 
 #endif
