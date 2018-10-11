@@ -11,6 +11,7 @@ string name[60];
 int A[60][4];
 int E[4];
 map<vector<int>, string> L[21], R[21];
+vector<pair<vector<int>, string>> Lv[21], Rv[21];
 int N, M;
 
 Airship ally_default, enemy_default;
@@ -63,6 +64,11 @@ void half_gen() {
         }
     }
 
+    for(int i=0;i<=M;i++){
+        Lv[i].insert(Lv[i].begin(), L[i].begin(), L[i].end());
+        L[i].clear();
+    }
+
     printf("Left generate done.\n");
 
     for(int i=0;i<(1<<Rsize);i++){
@@ -79,6 +85,11 @@ void half_gen() {
         }
     }
 
+    for(int i=0;i<=M;i++){
+        Rv[i].insert(Rv[i].begin(), R[i].begin(), R[i].end());
+        R[i].clear();
+    }
+
     printf("Right generate done.\n");
 }
 
@@ -92,7 +103,7 @@ void MITM() {
         printf("Investigating %lld pairs...\n", 1LL*L[i].size()*R[M-i].size());
 
         // pick i from L, M-i from R
-        for(const auto& lv:L[i]) for(const auto& rv:R[M-i]) {
+        for(const auto& lv:Lv[i]) for(const auto& rv:Rv[M-i]) {
             Airship ally = ally_default, enemy = enemy_default;
             ally.att += lv.first[0]+rv.first[0];
             ally.def += lv.first[1]+rv.first[1];
