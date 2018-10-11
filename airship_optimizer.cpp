@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include <set>
 #include "airship.h"
 #include "battle.h"
 using namespace std;
@@ -12,6 +13,7 @@ int A[60][4];
 int E[4];
 map<vector<int>, string> L[21], R[21];
 vector<pair<vector<int>, string>> Lv[21], Rv[21];
+set<vector<int>> vis_up, vis_down;
 int N, M;
 
 Airship ally_default, enemy_default;
@@ -20,10 +22,12 @@ void parse() {
     ifstream airship_ifs("airship.txt"), config_ifs("config.txt");
 
     airship_ifs >> N;
+    printf("Number of airships: %d\n", N);
     for(int i=0;i<N;i++) {
         airship_ifs >> name[i];
         for(int j=0;j<4;j++) airship_ifs >> A[i][j];
     }
+    printf("Read %d airships.\n", N);
 
     // TODO: fix this!
     string trash;
@@ -110,6 +114,9 @@ void MITM() {
             ally.spd += lv.first[2]+rv.first[2];
             ally.luk += lv.first[3]+rv.first[3];
 
+            if(ally.spd >= enemy.spd) vis_up.insert({lv.first[0], lv.first[1], lv.first[3]});
+            else vis_down.insert({lv.first[0], lv.first[1], lv.first[3]});
+
             auto result = battle(move(ally), move(enemy));
             if (result > best_hp) {
                 best_hp = result;
@@ -131,6 +138,8 @@ int main(){
     printf("Data generated.\n");
 
     MITM();
+
+    printf("Visited state: %lu and %lu\n", vis_up.size(), vis_down.size());
 
     cout << best_name << endl;
     cout << "Stat: ";
