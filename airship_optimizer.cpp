@@ -13,7 +13,9 @@ int A[60][4];
 int E[4];
 map<vector<int>, string> L[21], R[21];
 vector<pair<vector<int>, string>> Lv[21], Rv[21];
-set<vector<int>> vis_up, vis_down;
+
+const int SMAX = 700;
+int cache_up[SMAX][SMAX][SMAX], cache_down[SMAX][SMAX][SMAX];
 int N, M;
 
 Airship ally_default, enemy_default;
@@ -99,7 +101,8 @@ void half_gen() {
 
 string best_name;
 vector<int> best_stat;
-int best_hp = -0x3fFFffFF;
+const int INF = 0x3fFFffFF;
+int best_hp = -INF;
 
 void MITM() {
     for(int i=0;i<=M;i++) {
@@ -108,14 +111,20 @@ void MITM() {
 
         // pick i from L, M-i from R
         for(const auto& lv:Lv[i]) for(const auto& rv:Rv[M-i]) {
-            Airship ally = ally_default, enemy = enemy_default;
-            ally.att += lv.first[0]+rv.first[0];
-            ally.def += lv.first[1]+rv.first[1];
-            ally.spd += lv.first[2]+rv.first[2];
-            ally.luk += lv.first[3]+rv.first[3];
+            int att = lv.first[0]+rv.first[0];
+            int def = lv.first[1]+rv.first[1];
+            int spd = lv.first[2]+rv.first[2];
+            int luk = lv.first[3]+rv.first[3];
+            bool fast = ally_default.spd + spd >= enemy_default.spd;
 
-            if(ally.spd >= enemy.spd) vis_up.insert({lv.first[0], lv.first[1], lv.first[3]});
-            else vis_down.insert({lv.first[0], lv.first[1], lv.first[3]});
+            if (fast && cache_up[att][def][luk] != -INF) continue;
+            if (!fast && cache_down[att][def][luk] != -INF) continue;
+
+            Airship ally = ally_default, enemy = enemy_default;
+            ally.att += att;
+            ally.def += def;
+            ally.spd += spd;
+            ally.luk += luk;
 
             auto result = battle(move(ally), move(enemy));
             if (result > best_hp) {
@@ -124,11 +133,20 @@ void MITM() {
                 for(int j=0;j<4;j++) best_stat[j] += lv.first[j]+rv.first[j];
                 best_name = lv.second + rv.second;
             }
+
+            if (fast) cache_up[att][def][luk] = result;
+            else cache_down[att][def][luk] = result;
         }
     }
 }
 
+void init() {
+    for(int i=0;i<SMAX;i++) for(int j=0;j<SMAX;j++) for(int k=0;k<SMAX;k++)
+        cache_up[i][j][k] = cache_down[i][j][k] = -INF;
+}
+
 int main(){
+    init();
     parse();
     printf("Parse done.\n");
     printf("Ally\n"); ally_default.print();
@@ -138,8 +156,6 @@ int main(){
     printf("Data generated.\n");
 
     MITM();
-
-    printf("Visited state: %lu and %lu\n", vis_up.size(), vis_down.size());
 
     cout << best_name << endl;
     cout << "Stat: ";
