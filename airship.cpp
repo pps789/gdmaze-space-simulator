@@ -1,5 +1,6 @@
 #include "airship.h"
 #include <utility>
+#include <algorithm>
 
 std::pair<int,int> Airship::hit(const Airship& enemy) {
     int luck_factor = luk > enemy.luk ? (luk*1000/enemy.luk)/1000 : 1;
@@ -11,5 +12,5 @@ std::pair<int,int> Airship::hit(const Airship& enemy) {
     damage += additional;
     if (luk >= enemy.luk) damage += critical;
 
-    return {damage, enemy.reflect};
+    return {std::min(damage, enemy.cur_hp), std::min(enemy.reflect, cur_hp)};
 }

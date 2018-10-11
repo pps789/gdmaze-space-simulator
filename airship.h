@@ -9,6 +9,7 @@ struct Airship {
 
     int max_hp, cur_hp;
 
+    // returns (damage made by me, damage made by enemy)
     std::pair<int,int> hit(const Airship& enemy);
 };
 
