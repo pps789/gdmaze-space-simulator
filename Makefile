@@ -1,5 +1,5 @@
 CXX=g++
-CPPFLAGS=-std=c++11 -O3
+CPPFLAGS=-std=c++11 -O3 -m64
 
 SRCS=airship_optimizer.cpp battle.cpp airship.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
