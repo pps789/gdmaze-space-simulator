@@ -8,11 +8,9 @@
 #include "battle.h"
 using namespace std;
 
-string name[60];
 int A[60][4];
-int E[4];
-map<vector<int>, string> L[21], R[21];
-vector<pair<vector<int>, string>> Lv[21], Rv[21];
+map<vector<int>, long long> L[21], R[21];
+vector<pair<vector<int>, long long>> Lv[21], Rv[21];
 
 const int SMAX = 700;
 int cache_up[SMAX][SMAX][SMAX], cache_down[SMAX][SMAX][SMAX];
@@ -26,7 +24,6 @@ void parse() {
     airship_ifs >> N;
     printf("Number of airships: %d\n", N);
     for(int i=0;i<N;i++) {
-        airship_ifs >> name[i];
         for(int j=0;j<4;j++) airship_ifs >> A[i][j];
     }
     printf("Read %d airships.\n", N);
@@ -56,17 +53,16 @@ void half_gen() {
     Lsize = N/2, Rsize = N-Lsize;
     printf("LR: %d, %d\n", Lsize, Rsize);
 
-    for(int i=0;i<(1<<Lsize);i++){
+    for(long long i=0;i<(1<<Lsize);i++){
         int bitcnt = 0;
         vector<int> cur(4);
         string curname;
         for(int j=0;j<Lsize;j++) if(i&(1<<j)) {
             bitcnt++;
             for(int k=0;k<4;k++) cur[k] += A[j][k];
-            curname += name[j];
         }
         if (bitcnt <= M) {
-            L[bitcnt][cur] = curname;
+            L[bitcnt][cur] = i;
         }
     }
 
@@ -77,17 +73,16 @@ void half_gen() {
 
     printf("Left generate done.\n");
 
-    for(int i=0;i<(1<<Rsize);i++){
+    for(long long i=0;i<(1<<Rsize);i++){
         int bitcnt = 0;
         vector<int> cur(4);
         string curname;
         for(int j=0;j<Rsize;j++) if(i&(1<<j)) {
             bitcnt++;
             for(int k=0;k<4;k++) cur[k] += A[Lsize+j][k];
-            curname += name[Lsize+j];
         }
         if (bitcnt <= M) {
-            R[bitcnt][cur] = curname;
+            R[bitcnt][cur] = i<<Lsize;
         }
     }
 
@@ -131,7 +126,7 @@ void MITM() {
                 best_hp = result;
                 best_stat = vector<int>(4);
                 for(int j=0;j<4;j++) best_stat[j] += lv.first[j]+rv.first[j];
-                best_name = lv.second + rv.second;
+                best_name = lv.second | rv.second;
             }
 
             if (fast) cache_up[att][def][luk] = result;
