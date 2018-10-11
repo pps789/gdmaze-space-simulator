@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <vector>
 #include <fstream>
 #include <set>
@@ -13,10 +14,10 @@ map<vector<int>, long long> L[21], R[21];
 vector<pair<vector<int>, long long>> Lv[21], Rv[21];
 
 const int SMAX = 700;
-map<int,map<int,int>> cache_up[SMAX], cache_down[SMAX];
+unordered_map<int,unordered_map<int,int>> cache_up[SMAX], cache_down[SMAX];
 int N, M;
 
-bool cache_check(const map<int,map<int,int>>& cache, int x, int y) {
+bool cache_check(const unordered_map<int,unordered_map<int,int>>& cache, int x, int y) {
     if (cache.count(x)) return cache.at(x).count(y);
     return false;
 }
