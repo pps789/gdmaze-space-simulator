@@ -40,6 +40,9 @@ void parse() {
     config_ifs >> trash >> enemy_default.max_hp;
     config_ifs >> trash >> enemy_default.att >> enemy_default.def
         >> enemy_default.spd >> enemy_default.luk;
+
+    ally_default.cur_hp = ally_default.max_hp;
+    enemy_default.cur_hp = enemy_default.cur_hp;
 }
 
 int Lsize, Rsize;
